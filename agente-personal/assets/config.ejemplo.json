@@ -1,0 +1,26 @@
+{
+  "asistente": {
+    "nombre": "Luna",
+    "variantes_voz": ["luna", "lun", "una"]
+  },
+  "dueno": {
+    "nombre": "Andrés",
+    "trato": "tu"
+  },
+  "idioma": "español",
+  "max_lineas": 15,
+  "carpeta_trabajo": "C:/Users/andres/Documents/Luna",
+  "archivos": {"lectura": "carpeta"},
+  "computadores": 1,
+  "conectores": [
+    {"nombre": "Gmail", "uso": "leer correos y crear borradores"},
+    {"nombre": "Google Calendar", "uso": "ver y crear eventos"},
+    {"nombre": "Google Drive", "uso": "buscar y leer documentos"}
+  ],
+  "voz": {"activa": true, "modelo": "small", "idioma": "es"},
+  "entregas": {"destino": "carpeta", "carpeta": "C:/Users/andres/Google Drive/Luna"},
+  "memoria": {"tipo": "simple", "archivo": "MEMORIA.md", "cerebro": "Cerebro"},
+  "mantenimiento": {"activo": true, "dia": "domingo", "hora": "20:00", "cierre_semanal": true, "tareas_extra": []},
+  "limites": {"consulta_min": 20, "trabajo_min": 45},
+  "instrucciones_extra": ""
+}
