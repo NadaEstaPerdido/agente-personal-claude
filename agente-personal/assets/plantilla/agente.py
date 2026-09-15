@@ -276,7 +276,7 @@ MULETILLAS = _muletillas()
 # Encargos: "haz...", "quiero que hagas...", "me gustaría que...", "¿puedes...?", órdenes directas.
 ENCARGO = (
     r"(?:haz\w*|hagas|haga|trabaja|investiga"
-    r"|(?:s[uú]be|cr[eé]a|agend[ae]|escr[ií]be|red[aá]cta|prep[aá]ra|actual[ií]za|organ[ií]za|mu[eé]ve|agr[eé]ga"
+    r"|(?:s[uú]be|cr[eé]a|ag[eé]nd[ae]|escr[ií]be|red[aá]cta|prep[aá]ra|actual[ií]za|organ[ií]za|mu[eé]ve|agr[eé]ga"
     r"|a[nñ]ade|c[aá]mbia|p[oó]n|programa|env[ií]a|responde|borra|gu[aá]rda|revisa\s+y)\w*"
     r"|(?:me\s+gustar[ií]a|quiero|quisiera|necesito|te\s+pido|le\s+pido|ser[ií]a\s+bueno)\s+que"
     r"|(?:puedes|puede|podr[ií]as?|me\s+ayudas\s+a|ay[uú]dame\s+a|ay[uú]deme\s+a)\s+\w+)\b"
@@ -319,6 +319,14 @@ def saludo_del_dia(estado):
     return f"{momento}, {DUENO} 👋\n\n"
 
 
+def entorno_claude():
+    entorno = dict(os.environ)
+    entorno.pop("CLAUDECODE", None)
+    # Algunos servidores MCP (Python pesados) tardan más de los 30 s que Claude Code espera por defecto al arrancar.
+    entorno.setdefault("MCP_TIMEOUT", str(int(LIMITES.get("arranque_conectores_s", 120)) * 1000))
+    return entorno
+
+
 def ejecutar_claude(claude, texto, modo, sesion, herramientas):
     cmd = claude + [
         "-p", "--output-format", "json",
@@ -329,8 +337,7 @@ def ejecutar_claude(claude, texto, modo, sesion, herramientas):
     ]
     if sesion:
         cmd += ["--resume", sesion]
-    entorno = dict(os.environ)
-    entorno.pop("CLAUDECODE", None)
+    entorno = entorno_claude()
     mensaje = f"[Mensaje de {DUENO} por Telegram · modo {modo}]\n{texto}"
     p = subprocess.run(
         cmd, input=mensaje, capture_output=True, text=True, encoding="utf-8", errors="replace",

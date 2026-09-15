@@ -30,7 +30,7 @@ def correr(claude, permitidas, prohibidas, prompt, carpeta, minutos):
     ]
     p = subprocess.run(
         cmd, input=prompt, capture_output=True, text=True, encoding="utf-8", errors="replace",
-        cwd=carpeta, timeout=minutos * 60, creationflags=ag.SIN_VENTANA,
+        cwd=carpeta, timeout=minutos * 60, creationflags=ag.SIN_VENTANA, env=ag.entorno_claude(),
     )
     try:
         j = json.loads(p.stdout)
