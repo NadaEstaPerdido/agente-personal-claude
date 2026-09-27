@@ -3,10 +3,15 @@
 1. Cierre de la semana: revisa qué se movió, actualiza la memoria (y el Cerebro si existe) y resume logros y pendientes.
 2. Tareas extra definidas en config.json > mantenimiento.tareas_extra.
 3. Reinicia la conversación del bot y manda el resumen por Telegram.
+
+Cada tarea elige su modelo: el cierre decide cosas y va en Opus; las tareas de leer, resumir
+y archivar van en Sonnet, que cuesta bastante menos y las hace igual de bien.
+Con `python mantenimiento.py extras` corren solo las tareas extra, sin el cierre.
 """
 import datetime
 import json
 import subprocess
+import sys
 import time
 
 import agente as ag
@@ -20,9 +25,10 @@ SEMANA = (
 )
 
 
-def correr(claude, permitidas, prohibidas, prompt, carpeta, minutos):
+def correr(claude, permitidas, prohibidas, prompt, carpeta, minutos, modelo="sonnet"):
     cmd = claude + [
         "-p", "--output-format", "json",
+        "--model", modelo,
         "--permission-mode", "dontAsk",
         "--allowedTools", ",".join(permitidas),
         "--disallowedTools", ",".join(prohibidas),
@@ -50,27 +56,28 @@ def main():
     estado = ag.Estado()
 
     tareas = []
-    if config.get("cierre_semanal", True):
-        tareas.append(("Cierre de la semana", SEMANA, ag.BASE, [], 30))
+    if config.get("cierre_semanal", True) and "extras" not in sys.argv[1:]:
+        tareas.append(("Cierre de la semana", SEMANA, ag.BASE, [], 30, config.get("modelo_cierre", "opus")))
     for extra in config.get("tareas_extra", []):
         tareas.append((extra["nombre"], extra["prompt"], ag.Path(extra.get("carpeta") or ag.BASE).expanduser(),
-                       extra.get("herramientas_extra", []), int(extra.get("minutos", 60))))
+                       extra.get("herramientas_extra", []), int(extra.get("minutos", 60)),
+                       extra.get("modelo", "sonnet")))
 
     partes = [f"🗓️ Mantenimiento semanal de {ag.NOMBRE} · {datetime.date.today().strftime('%d/%m/%Y')}"]
-    for nombre, prompt, carpeta, extra, minutos in tareas:
-        ag.log.info("Mantenimiento: %s", nombre)
+    for nombre, prompt, carpeta, extra, minutos, modelo in tareas:
+        ag.log.info("Mantenimiento: %s (%s)", nombre, modelo)
         permitidas = h["trabajo"] + extra
         # Una tarea que pide Bash(comando) concreto necesita quitar el bloqueo general de Bash.
         prohibidas = [x for x in h["prohibidas"] if not (x == "Bash" and any(e.startswith("Bash(") for e in extra))]
         inicio = time.time()
         try:
-            texto, error = correr(claude, permitidas, prohibidas, prompt, carpeta, minutos)
+            texto, error = correr(claude, permitidas, prohibidas, prompt, carpeta, minutos, modelo)
         except subprocess.TimeoutExpired:
             texto, error = f"se pasó de {minutos} minutos y la detuve", True
         except Exception as e:  # noqa: BLE001
             texto, error = str(e)[:300], True
         ag.log.info("%s terminó en %.0f min (error=%s)", nombre, (time.time() - inicio) / 60, error)
-        partes.append(f"\n{'⚠️' if error else '✅'} {nombre}\n{texto}")
+        partes.append(f"\n{'⚠️' if error else '✅'} {nombre} ({modelo})\n{texto}")
 
     estado.set("sesion", None)
     estado.set("ultima_limpieza", datetime.date.today().isoformat())

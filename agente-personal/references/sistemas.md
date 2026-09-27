@@ -21,6 +21,15 @@ Las notas de voz no necesitan ffmpeg: faster-whisper decodifica el audio por su 
 - **macOS:** `StartCalendarInterval`. launchd no despierta el equipo; si debe correr con la tapa cerrada: `sudo pmset repeat wake <día> <hora>` (explícale y que lo corra la persona).
 - **Linux:** timer de systemd con `Persistent=true` (corre al encender si se perdió).
 
+## Que vuelva solo si se cayó
+El arranque al iniciar sesión no alcanza cuando el computador se suspende: la copia vieja queda congelada y la nueva se retira. Conviene además un reintento periódico, que no hace daño porque el candado deja pasar una sola copia:
+- **Windows:** agregarle a la tarea del bot un disparador que se repita cada 15 minutos, además del de inicio de sesión. Necesita PowerShell **como administrador**:
+  ```powershell
+  $r = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval (New-TimeSpan -Minutes 15)
+  Set-ScheduledTask -TaskName "<nombre de la tarea>" -Trigger @((New-ScheduledTaskTrigger -AtLogOn), $r)
+  ```
+- **macOS y Linux:** ya está cubierto, con `KeepAlive` en launchd y `Restart=always` en systemd.
+
 ## Mantener el computador despierto
 El agente solo responde con el computador encendido. Explícale a la persona cómo hacerlo; es un ajuste de su sistema, así que lo hace ella:
 - **Windows:** Configuración › Sistema › Energía y batería › suspensión en «Nunca» con corriente.

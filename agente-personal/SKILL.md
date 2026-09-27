@@ -76,6 +76,7 @@ Pregunta, de a una o dos:
 - **Documentos** (Word/PDF que le pida): ¿dónde los deja? Opciones: carpeta sincronizada de Google Drive/OneDrive/Dropbox (recomendada si usa alguna: aparece en su celular), Nextcloud, o solo en el computador.
 - **Memoria compartida** (solo si en la fase 4 dijo dos o más computadores): ¿qué carpeta sincronizada usa (Nextcloud, Google Drive, OneDrive, Dropbox)? Ahí vivirá la memoria o el Cerebro.
 - **Mantenimiento semanal**: ¿qué día y a qué hora? Explica que cierra la semana (logros, pendientes, vencimientos), limpia la memoria y le manda el resumen. Sugiere domingo en la noche o el día antes de que se reinicie su límite semanal de Claude.
+- **Tareas extra del mantenimiento** (opcional): revisiones que se repiten cada semana sobre una carpeta o un tema, como poner al día un archivo de investigación o resumir documentos nuevos. Van en `mantenimiento.tareas_extra`, cada una con su carpeta, su prompt y sus `herramientas_extra`. Tres reglas que ahorran mucho: el cierre corre en `opus` y las tareas extra en `sonnet` (leer y resumir no necesita el modelo caro); los archivos largos se leen por bloques con `mapa_texto.py`, nunca completos; y el prompt debe decir cómo correr comandos —uno por llamada, sin `cd` ni `&&`, con rutas absolutas—, porque con `dontAsk` lo que no coincide con un permiso se niega en silencio.
 
 ## Fase 8 · Construcción
 1. Escribe `respuestas.json` con la forma de `<skill>/assets/config.ejemplo.json`.
@@ -96,7 +97,7 @@ Pregunta, de a una o dos:
    - Texto: «¿qué puedes hacer?»
    - Nota de voz: «Oye <nombre>, recuerda que me gusta el café sin azúcar» → debe caer en modo memoria.
    - Encargo: «<nombre>, haz un documento en Word con tres ideas para mi semana» → debe llegar el aviso de entrega.
-3. Explica cómo mantener el computador despierto (`references/sistemas.md`); ese ajuste lo hace la persona.
+3. Explica cómo mantener el computador despierto y cómo dejar que la tarea reintente sola cada 15 minutos (`references/sistemas.md`); esos ajustes los hace la persona, el segundo necesita permisos de administrador.
 
 ## Cierre
 Resume en pocas líneas: nombre y usuario del bot, conectores, qué nunca hará, dónde están las guías, cuándo corre el mantenimiento y los tres comandos que más usará (`servicio.py estado`, `servicio.py reiniciar`, `agente.py --probar`). Si algo quedó pendiente (un conector sin autorizar, PDF sin LibreOffice), dilo claro.
@@ -108,7 +109,7 @@ Resume en pocas líneas: nombre y usuario del bot, conectores, qué nunca hará,
 - **Algo falla:** `references/problemas.md`.
 
 ## Qué hay en la skill
-- `assets/plantilla/`: el bot (`agente.py`), entregas, mantenimiento, `configurar.py` (secretos) y `servicio.py` (arranque en Windows, macOS y Linux). No se editan para personalizar: todo va en `config.json` y `herramientas.json`.
+- `assets/plantilla/`: el bot (`agente.py`), entregas, mantenimiento, `mapa_texto.py` (leer archivos largos por bloques), `configurar.py` (secretos) y `servicio.py` (arranque en Windows, macOS y Linux). No se editan para personalizar: todo va en `config.json` y `herramientas.json`.
 - `assets/config.ejemplo.json`: forma de las respuestas.
 - `scripts/`: verificar entorno, crear agente, listar y clasificar herramientas, generar guías.
 - `references/`: conectores, seguridad, sistemas operativos, memoria y Cerebro, problemas frecuentes. Léelas cuando llegues a la fase que las necesita, no todas al inicio.

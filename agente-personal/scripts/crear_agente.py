@@ -14,7 +14,8 @@ from pathlib import Path
 
 SKILL = Path(__file__).resolve().parent.parent
 PLANTILLA = SKILL / "assets" / "plantilla"
-CODIGO = ["agente.py", "entregas.py", "mantenimiento.py", "configurar.py", "servicio.py", "requirements.txt"]
+CODIGO = ["agente.py", "entregas.py", "mantenimiento.py", "mapa_texto.py", "configurar.py", "servicio.py",
+          "requirements.txt"]
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from verificar_entorno import buscar_claude  # noqa: E402

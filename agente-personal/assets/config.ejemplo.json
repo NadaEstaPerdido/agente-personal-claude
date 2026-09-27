@@ -20,7 +20,20 @@
   "voz": {"activa": true, "modelo": "small", "idioma": "es"},
   "entregas": {"destino": "carpeta", "carpeta": "C:/Users/andres/Google Drive/Luna"},
   "memoria": {"tipo": "simple", "archivo": "MEMORIA.md", "cerebro": "Cerebro"},
-  "mantenimiento": {"activo": true, "dia": "domingo", "hora": "20:00", "cierre_semanal": true, "tareas_extra": []},
+  "mantenimiento": {
+    "activo": true, "dia": "domingo", "hora": "20:00", "cierre_semanal": true,
+    "modelo_cierre": "opus",
+    "tareas_extra": [
+      {
+        "nombre": "Revisar la carpeta de contratos",
+        "prompt": "Revisa los archivos nuevos de la carpeta y resume lo que cambió. Los archivos largos no se leen completos: corre `python mapa_texto.py \"<archivo>\"` y pide solo los bloques que necesites con `--bloque N`. Un comando por llamada, sin `cd` ni `&&`, con rutas absolutas.",
+        "carpeta": "C:/Users/andres/Documents/Luna/Contratos",
+        "herramientas_extra": ["Bash(python *)", "Bash(ls *)", "Bash(grep *)"],
+        "minutos": 60,
+        "modelo": "sonnet"
+      }
+    ]
+  },
   "limites": {"consulta_min": 20, "trabajo_min": 45},
   "instrucciones_extra": ""
 }

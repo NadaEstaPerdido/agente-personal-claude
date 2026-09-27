@@ -434,14 +434,23 @@ _candado = None
 
 
 def una_sola_instancia():
-    """Dos copias del bot se pelean por los mensajes de Telegram: la segunda se retira."""
+    """Dos copias del bot se pelean por los mensajes de Telegram: la segunda se retira.
+
+    Cuando el computador se suspende, la copia vieja puede quedar congelada sin soltar el puerto:
+    por eso se espera medio minuto antes de rendirse, en vez de salir de una.
+    """
     global _candado
     puerto = 47000 + zlib.crc32(str(AQUI).encode()) % 1000
     _candado = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        _candado.bind(("127.0.0.1", puerto))
-    except OSError:
-        raise SystemExit(f"{NOMBRE} ya está corriendo en este computador.")
+    for intento in range(6):
+        try:
+            _candado.bind(("127.0.0.1", puerto))
+            return
+        except OSError:
+            if intento == 0:
+                log.info("El puerto sigue tomado por una copia anterior; espero a que lo suelte.")
+            time.sleep(5)
+    raise SystemExit(f"{NOMBRE} ya está corriendo en este computador.")
 
 
 def probar(texto):
@@ -458,9 +467,9 @@ def probar(texto):
 
 
 def main():
-    una_sola_instancia()
     env = cargar_env()
-    configurar_log(env)
+    configurar_log(env)  # el log va primero: así una salida temprana queda registrada
+    una_sola_instancia()
     token = env.get("TELEGRAM_BOT_TOKEN")
     if not token:
         raise SystemExit("Falta TELEGRAM_BOT_TOKEN en .env. Corre: python configurar.py")

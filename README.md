@@ -10,7 +10,8 @@ Sin frameworks de terceros ni servidores intermedios: tu plan de Claude, Python 
 - **Hace encargos**: «haz…», «quiero que agendes…», «¿puedes…?». Crea y edita archivos, eventos y tareas.
 - **Investiga** en la web y entrega en **Word o PDF** en tu nube o carpeta sincronizada.
 - **Recuerda**: «recuerda que…» y lo guarda en su memoria.
-- **Mantenimiento semanal**: cierra la semana, limpia la memoria y te manda el resumen.
+- **Mantenimiento semanal**: cierra la semana, limpia la memoria y te manda el resumen. Puede llevar tareas extra tuyas (revisar una carpeta, poner al día una investigación), cada una con su modelo y sus permisos.
+- **Cuida tu consumo**: el cierre corre en Opus y las tareas de leer y resumir en Sonnet; los archivos largos se leen por bloques con `mapa_texto.py` en vez de completos.
 - Arranca solo con el computador (Windows, macOS o Linux).
 
 ## Seguridad de serie
@@ -38,7 +39,7 @@ La skill te hace las preguntas (sistema, nombre del asistente, cuántos computad
 ```
 agente-personal/
 ├── SKILL.md              el flujo de preguntas que sigue Claude
-├── assets/plantilla/     el bot: agente.py, entregas, mantenimiento, configurar.py, servicio.py
+├── assets/plantilla/     el bot: agente.py, entregas, mantenimiento, mapa_texto.py, configurar.py, servicio.py
 ├── scripts/              verificar entorno, crear agente, listar y clasificar herramientas, generar guías
 └── references/           conectores, seguridad, sistemas operativos, memoria y Cerebro, problemas frecuentes
 ```
