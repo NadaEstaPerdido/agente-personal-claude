@@ -100,9 +100,9 @@ def instrucciones():
         f"Responde en {CFG.get('idioma', 'español')}, en texto plano (sin tablas ni markdown pesado), en máximo unas "
         f"{CFG.get('max_lineas', 15)} líneas y al grano. No pegues documentos completos ni datos sensibles "
         "(documentos de identidad, cuentas, direcciones): resume y di dónde está.",
-        "Cada mensaje trae su modo. En modo consulta solo lees: si la tarea exige escribir, di qué harías y pídele "
-        f"que te lo pida como encargo, por ejemplo «{NOMBRE}, haz…» o «{NOMBRE}, quiero que hagas…». "
-        f"En modo trabajo puedes crear y editar archivos en {BASE} y en los conectores; al terminar, di qué cambiaste.",
+        f"Cualquier mensaje puede ser un encargo: puedes crear y editar archivos en {BASE} y en los conectores, "
+        "dentro de lo permitido; al terminar, di en una línea qué cambiaste. Si la petición es ambigua y el cambio "
+        "es difícil de deshacer, pregunta antes.",
         f"En modo memoria, {DUENO} te pide recordar algo para siempre: guárdalo en "
         f"{memoria.get('archivo', 'MEMORIA.md')} (o en la página del proyecto si es de un proyecto) y confirma en una "
         "línea qué archivo tocaste. Nunca guardes datos sensibles.",
@@ -120,10 +120,8 @@ def instrucciones():
 def ayuda():
     return "\n".join([
         f"Hola {DUENO}, soy {NOMBRE}.",
-        t("• Escríbeme o mándame una nota de voz: consulto y te respondo.",
-          "• Escríbame o envíeme una nota de voz: consulto y le respondo."),
-        t(f"• Pídemelo como encargo («{NOMBRE}, haz…», «quiero que hagas…», «¿puedes…?») y además creo o edito cosas.",
-          f"• Pídamelo como encargo («{NOMBRE}, haga…», «quiero que haga…», «¿puede…?») y además creo o edito cosas."),
+        t("• Escríbeme o mándame una nota de voz, como le hablarías a una persona: pregunto, busco, creo y edito.",
+          "• Escríbame o envíeme una nota de voz, como le hablaría a una persona: pregunto, busco, creo y edito."),
         t("• Empieza con «recuerda» para que lo guarde para siempre.",
           "• Empiece con «recuerda» para que lo guarde para siempre."),
         "• /nueva empieza una conversación desde cero.",
@@ -273,26 +271,16 @@ def _muletillas():
 
 MULETILLAS = _muletillas()
 
-# Encargos: "haz...", "quiero que hagas...", "me gustaría que...", "¿puedes...?", órdenes directas.
-ENCARGO = (
-    r"(?:haz\w*|hagas|haga|trabaja|investiga"
-    r"|(?:s[uú]be|cr[eé]a|ag[eé]nd[ae]|escr[ií]be|red[aá]cta|prep[aá]ra|actual[ií]za|organ[ií]za|mu[eé]ve|agr[eé]ga"
-    r"|a[nñ]ade|c[aá]mbia|p[oó]n|programa|env[ií]a|responde|borra|gu[aá]rda|revisa\s+y)\w*"
-    r"|(?:me\s+gustar[ií]a|quiero|quisiera|necesito|te\s+pido|le\s+pido|ser[ií]a\s+bueno)\s+que"
-    r"|(?:puedes|puede|podr[ií]as?|me\s+ayudas\s+a|ay[uú]dame\s+a|ay[uú]deme\s+a)\s+\w+)\b"
-)
-
-
 def detectar_modo(texto):
+    """No hay modo de solo lectura: todo mensaje puede trabajar.
+
+    Adivinar si una frase era pregunta o encargo fallaba seguido y obligaba a repetir el mensaje
+    con la palabra exacta. «Recuerda» es lo único que se separa, porque va a la memoria.
+    """
     m = re.match(MULETILLAS + r"recuerda\b[\s:,.]*", texto, re.IGNORECASE)
     if m:
         return "memoria", texto[m.end():]
-    m = re.match(MULETILLAS + r"trabaja\b[\s:,.]*", texto, re.IGNORECASE)
-    if m:
-        return "trabajo", texto[m.end():]
-    if re.match(MULETILLAS + ENCARGO, texto, re.IGNORECASE):
-        return "trabajo", texto
-    return "consulta", texto
+    return "trabajo", texto
 
 
 def cargar_herramientas():

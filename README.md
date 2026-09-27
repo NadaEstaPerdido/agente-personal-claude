@@ -7,7 +7,7 @@ Sin frameworks de terceros ni servidores intermedios: tu plan de Claude, Python 
 ## Qué hace el agente
 - Entiende **texto y notas de voz**; transcribe localmente con faster-whisper.
 - **Consulta** tus archivos, correo, calendario y documentos a través de conectores (Gmail, Google Drive, Calendar, Microsoft 365, Notion, Nextcloud…).
-- **Hace encargos**: «haz…», «quiero que agendes…», «¿puedes…?». Crea y edita archivos, eventos y tareas.
+- **Hace encargos** sin palabras mágicas: le escribes normal y crea y edita archivos, eventos y tareas.
 - **Investiga** en la web y entrega en **Word o PDF** en tu nube o carpeta sincronizada.
 - **Recuerda**: «recuerda que…» y lo guarda en su memoria.
 - **Mantenimiento semanal**: cierra la semana, limpia la memoria y te manda el resumen. Puede llevar tareas extra tuyas (revisar una carpeta, poner al día una investigación), cada una con su modelo y sus permisos.
@@ -16,7 +16,7 @@ Sin frameworks de terceros ni servidores intermedios: tu plan de Claude, Python 
 
 ## Seguridad de serie
 - Solo obedece a tu cuenta de Telegram. No abre puertos.
-- Permisos por lista blanca en cada modo. **Nunca** envía correos o mensajes (deja borradores), no borra, no comparte, no paga, no ejecuta comandos.
+- Permisos por lista blanca. **Nunca** envía correos o mensajes (deja borradores), no borra, no comparte, no paga, no ejecuta comandos.
 - Escribe solo dentro de su carpeta de trabajo; los secretos (`.env`, sesión de Claude, llaves SSH) quedan bloqueados.
 - Trata como datos, no como órdenes, lo que venga en correos o páginas web.
 

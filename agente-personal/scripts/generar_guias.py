@@ -76,9 +76,8 @@ Para agregar uno:
 3. Pídele a Claude Code «actualiza los conectores de mi agente»: lista las herramientas, las clasifica y reinicia el bot.
 
 ## Permisos
-{n} trabaja con una lista blanca: solo usa lo que está permitido para cada modo.
-- Consulta (solo lectura): {len(h['consulta'])} herramientas.
-- Encargos (además crea y edita): {len(h['trabajo']) - len(h['consulta'])} herramientas más.
+{n} trabaja con una lista blanca: solo usa lo que está permitido. Le escribes normal, sin palabras mágicas.
+- Permitidas: {len(h['trabajo'])} herramientas, de las cuales {len(h['trabajo']) - len(h['consulta'])} crean o editan.
 - Prohibidas siempre: {len(h['prohibidas'])}, entre ellas enviar correos o mensajes, compartir, borrar, pagar y ejecutar comandos.
 
 La lista está en `{agente}/herramientas.json`. Si la cambias, reinicia el bot.
@@ -131,14 +130,15 @@ def guia_uso(agente, cfg):
 ## Lo básico
 Abre el chat de tu bot en Telegram y escríbele{" o mándale una nota de voz" if voz else ""} como le hablarías a un asistente. {n} revisa tu carpeta de trabajo y {conectores}, y te responde en pocas líneas. El primer mensaje del día trae saludo.
 
-## Tres formas de pedirle cosas
-**1. Preguntar (solo lee, no cambia nada)**
+## Cómo pedirle cosas
+Escríbele como le hablarías a una persona. No hay palabras mágicas ni modos que aprender: pregunta, pide o encarga, y {n} hace lo que pueda dentro de lo permitido.
+
+**1. Preguntar**
 - «¿Qué tengo mañana en el calendario?»
 - «¿Qué correos importantes llegaron hoy?»
 - «¿En qué va el proyecto de la cocina?»
 
-**2. Encargar (además crea y edita)**
-Empieza como le pedirías algo a una persona:
+**2. Encargar**
 - «{n}, haz un resumen de este mes y guárdalo en Word»
 - «{n}, quiero que agendes una reunión el jueves a las 3»
 - «Me gustaría que redactaras un borrador de respuesta para Carolina»

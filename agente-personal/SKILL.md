@@ -64,10 +64,10 @@ Para cada conector elegido:
 Anota en `respuestas.json > conectores` el nombre y el uso en palabras simples («leer correos y crear borradores»).
 
 ## Fase 6 · Qué puede hacer (permisos)
-Explica los tres modos con ejemplos usando el nombre del asistente:
-- **Preguntar** («¿qué tengo mañana?»): solo lee.
-- **Encargar** («Luna, haz…», «quiero que agendes…», «¿puedes…?»): además crea y edita.
-- **Recordar** («recuerda que…»): guarda en su memoria.
+Explícale que no tiene que aprenderse palabras mágicas: le escribe normal y el asistente hace lo que pida, dentro de la lista blanca. Solo hay una fórmula:
+- **Recordar** («recuerda que…»): guarda en su memoria en vez de responder y olvidar.
+
+Antes había un modo de solo lectura que exigía pedir los encargos con verbos concretos; se quitó porque fallaba con frases normales y obligaba a repetir el mensaje. Lo que protege no son los modos, es la lista blanca.
 Y lo que **nunca** hará por defecto: enviar correos o mensajes (deja borradores), borrar, compartir, publicar, pagar, ejecutar comandos. Pregunta si quiere prohibir algo más o si le preocupa algo. Si pide permitir algo prohibido, usa `references/seguridad.md` para explicarle el riesgo antes de aceptar.
 
 ## Fase 7 · Voz, documentos, memoria y rutina
